@@ -85,6 +85,13 @@ namespace WebPerson
 
             app.UseIdentity();
 
+            //aqui invoco todo lo relaciona para login con face:
+            app.UseFacebookAuthentication(new FacebookOptions()
+            {
+                AppId = "388687381523143",
+                AppSecret = "b2d7b3044ad664ef0add41671c98ac52"
+            });
+
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
