@@ -5,9 +5,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using WebPerson.Data;
 using WebPerson.Models;
 using WebPerson.Models.AccountViewModels;
 using WebPerson.Services;
@@ -23,18 +25,26 @@ namespace WebPerson.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
+        private readonly ApplicationDbContext DB;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext db,
+            RoleManager<IdentityRole> roleManage )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+
+            this.DB = db;
+            this._roleManager = roleManage;
         }
 
         //
@@ -63,7 +73,9 @@ namespace WebPerson.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                   // return RedirectToLocal(returnUrl);
+
+                    return RedirectToAction("Index", "PersonsDatas");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -91,8 +103,14 @@ namespace WebPerson.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            RegisterViewModel r = new RegisterViewModel();
+
+            r.GetRoles(_roleManager);
+
+
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+
+            return View(r);
         }
 
         //
@@ -103,10 +121,15 @@ namespace WebPerson.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
+
+
+
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
@@ -116,6 +139,12 @@ namespace WebPerson.Controllers
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    //Aquii le agrego el role al nuevo usuario, ya con el role en memoria:
+                    await _userManager.AddToRoleAsync(user, model.Role);
+
+
+
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }

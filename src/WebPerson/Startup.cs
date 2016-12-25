@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -60,7 +61,7 @@ namespace WebPerson
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -92,6 +93,37 @@ namespace WebPerson
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //await CreateRoles(serviceProvider);
         }
+
+
+        //metodo para generar roles a los usuarios a registrar:
+        //private async Task CreateRoles(IServiceProvider serviceProvider)
+        //{
+        //    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //    var usermanager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        //    string[] rolesNames = {"Admin" , "User"};
+
+        //    IdentityResult result;
+
+        //    foreach (var rolesName in rolesNames)
+        //    {
+        //       //aqui obtengo los roles en bd de los usuarios:
+        //        var roleExist = await roleManager.RoleExistsAsync(rolesName);
+
+        //        //aqui pregunto si los roles existen en la bd: si no existen los creo..
+        //        if (!roleExist)
+        //        {
+        //            result = await roleManager.CreateAsync(new IdentityRole(rolesName));
+        //        }
+
+
+        //        var user = await usermanager.FindByIdAsync("18c3df1b-160b-4daf-9bc1-d332f03ddf5b");
+        //        await usermanager.AddToRoleAsync(user, "Admin");
+        //    }
+
+        //}
     }
 }
