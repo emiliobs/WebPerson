@@ -146,7 +146,9 @@ namespace WebPerson.Controllers
 
 
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+
+                    return RedirectToAction("Register", "Account");
+                    // return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }
