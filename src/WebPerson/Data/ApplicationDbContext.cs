@@ -24,6 +24,8 @@ namespace WebPerson.Data
         }
 
         public DbSet<PersonsData> PersonsData { get; set; }
+
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
        // public DbSet<IdentityRole> identityRoles { get; set; }
     }
 }

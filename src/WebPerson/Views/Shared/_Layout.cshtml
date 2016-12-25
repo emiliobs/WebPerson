@@ -40,6 +40,7 @@
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <li><a asp-area="" asp-controller="PersonsDatas" asp-action="Index">Persons.</a></li>
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index">Users.</a></li>
                     }
                     else
                     {
