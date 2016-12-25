@@ -92,6 +92,14 @@ namespace WebPerson
                 AppSecret = "b2d7b3044ad664ef0add41671c98ac52"
             });
 
+            //aqui inicio sesión con google+
+
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId = "784867263420-sgffmtonluqn39e0gpi0rtn8lcvvinoq.apps.googleusercontent.com",
+                ClientSecret = "rz25HdlyOsVOAriATO-2Ikd4"
+            });
+
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
@@ -100,6 +108,8 @@ namespace WebPerson
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
 
             //await CreateRoles(serviceProvider);
         }

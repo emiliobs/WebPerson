@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-WebPerson-3a167dbe-7c36-4069-9580-992306e76be9",
 
   "dependencies": {
@@ -47,7 +47,8 @@
     },
     "jQuery": "3.1.1",
     "bootstrap": "4.0.0-alpha5",
-    "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0"
+    "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.Google": "1.1.0"
   },
 
   "tools": {
