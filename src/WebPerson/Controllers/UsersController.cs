@@ -64,21 +64,35 @@ namespace WebPerson.Controllers
             return View(applicationUser);
         }
 
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
-            if (applicationUser == null)
-            {
-                return NotFound();
-            }
-            return View(applicationUser);
+        public async Task<List<ApplicationUser>> EditAjax(string id)
+        {
+           var user = new List<ApplicationUser>();
+
+            var appUser = await _context.ApplicationUser.SingleOrDefaultAsync(u => u.Id == id);
+
+            user.Add(appUser);
+
+            return user;
+
+
         }
+
+        // GET: Users/Edit/5
+        //public async Task<IActionResult> Edit(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
+        //    if (applicationUser == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(applicationUser);
+        //}
 
         // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
